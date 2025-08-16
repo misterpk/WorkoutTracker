@@ -1,11 +1,3 @@
-// Id (int) - primary key
-// ProgramId (int) - foreign key to Program
-// ExerciseId (int) - foreign key to Exercise
-// Order (int) - sequence in the program (1st, 2nd, 3rd exercise)
-// PlannedSets (int) - how many sets planned
-// PlannedReps (int) - target reps per set
-// PlannedWeight (float) - target weight
-// PlannedRestTimeSeconds (int) - target rest time between sets in seconds
 namespace WorkoutTracker.Core.Models
 {
     public class ProgramExercise
