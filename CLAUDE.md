@@ -39,13 +39,18 @@ WorkoutTracker/
 ├── WorkoutTracker.sln              # Solution file
 ├── WorkoutTracker.Core/            # Domain models, business logic, interfaces
 ├── WorkoutTracker.Infrastructure/  # EF Core, repositories, data access
-└── WorkoutTracker.Web/            # ASP.NET Core app (Razor Pages + DTOs)
+├── WorkoutTracker.Web/            # ASP.NET Core app (Razor Pages + DTOs)
+└── WorkoutTracker.Tests/          # Test projects (to be added)
+    ├── WorkoutTracker.Core.Tests/     # Unit tests for domain logic
+    ├── WorkoutTracker.Infrastructure.Tests/  # Integration tests for data access
+    └── WorkoutTracker.Web.Tests/      # End-to-end tests for web app
 ```
 
 **Dependencies:**
 - Web → Infrastructure (repositories, data access)
 - Infrastructure → Core (domain models, interfaces)
 - Core → (no dependencies - pure domain logic)
+- Tests → Respective projects they're testing
 
 ## Learning Progression
 
@@ -193,13 +198,14 @@ dotnet ef database update
 1. **Clean Architecture** 🔄 (setting up project references)
 2. **Entity Framework Core** 📋 (next - Code First approach)
 3. **Repository Pattern** 📋 (abstraction over EF Core)
-4. **Hybrid Controllers** 📋 (serving both web and API responses)
-5. **Razor Pages** 📋 (server-side rendering)
-6. **Dependency Injection** 📋 (.NET's built-in DI container)
-7. **SQL understanding** 📋 (through EF Core query logging)
-8. **Blazor** 📋 (future phase 3)
-9. **.NET MAUI** 📋 (future phase 4 - cross-platform mobile)
-10. **iOS Native** 📋 (future phase 5 - comparison study)
+4. **Automated Testing** 📋 (unit, integration, end-to-end tests)
+5. **Hybrid Controllers** 📋 (serving both web and API responses)
+6. **Razor Pages** 📋 (server-side rendering)
+7. **Dependency Injection** 📋 (.NET's built-in DI container)
+8. **SQL understanding** 📋 (through EF Core query logging)
+9. **Blazor** 📋 (future phase 3)
+10. **.NET MAUI** 📋 (future phase 4 - cross-platform mobile)
+11. **iOS Native** 📋 (future phase 5 - comparison study)
 
 ## Quick Reference
 ```bash
@@ -218,7 +224,3 @@ dotnet sln list                 # Shows Core, Infrastructure, Web
 - Guide toward writing repository interfaces first, then implementations
 - Compare .NET patterns to work patterns when relevant
 - Build incrementally, test each layer as we add it
-
-## Git Commits
-- Git commits to follow Conventional Commits, specification located in ./cc.md
-
