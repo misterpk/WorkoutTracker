@@ -1,8 +1,7 @@
 namespace WorkoutTracker.Core.Models
 {
-    public class Set
+    public class Set : BaseModel
     {
-        public int Id { get; set; }
         public int WorkoutExerciseId { get; set; }
         public int Reps { get; set; }
         public float Weight { get; set; } // 0 indicates bodyweight

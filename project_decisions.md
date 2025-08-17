@@ -95,6 +95,8 @@ Building a workout tracking application to learn web development fundamentals, t
 - SQL Server Docker container configuration
 - VS Code development environment with C# Dev Kit
 - Project structure following enterprise patterns without over-engineering
+- **Complete domain model:** Exercise, Program, ProgramExercise, Workout, WorkoutExercise, Set
+- **Repository interfaces:** Full abstraction layer for data access with async patterns
 
 ### Key Decisions
 - Simplified architecture: Web → Infrastructure → Core (removed Shared)
@@ -105,14 +107,16 @@ Building a workout tracking application to learn web development fundamentals, t
 - **Domain Model:** Program/Workout separation (templates vs actual sessions)
 - **Data Types:** UTC timestamps, float for weights, non-nullable for performance
 - **Navigation Properties:** EF Core relationships with `= null!` pattern
+- **Interface Design:** YAGNI principle - only essential methods, add complexity when needed
 
 ## Next Steps
-1. Set up project references and dependencies
-2. Create Entity Framework models and DbContext
-3. Implement repository pattern interfaces and implementations
-4. Build first Razor Pages for exercise management
-5. Add API endpoints alongside web views
-6. Create .NET MAUI mobile app
+1. **Entity Framework Core setup** - Add EF packages to Infrastructure
+2. Create DbContext and configure entity relationships
+3. Generate first Code First migration and see SQL schema
+4. Implement repository pattern with EF Core
+5. Add dependency injection configuration
+6. Create test projects for unit/integration testing
+7. Build first Razor Pages for exercise management
 
 ## Development Philosophy
 - **Learning over speed** - Understanding problems before solutions

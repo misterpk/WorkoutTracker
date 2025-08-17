@@ -1,8 +1,7 @@
 namespace WorkoutTracker.Core.Models
 {
-    public class ProgramExercise
+    public class ProgramExercise : BaseModel
     {
-        public int Id { get; set; }
         public int ProgramId { get; set; }
         public int ExerciseId { get; set; }
         public int Order { get; set; }

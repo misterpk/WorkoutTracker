@@ -86,7 +86,9 @@ WorkoutTracker/
 - Simplified solution with 3 projects created
 - Project references configured (Web → Infrastructure → Core)
 - SQL Server Docker container available
-- Removed Shared project to avoid over-engineering
+- **Complete domain model:** Exercise, Program, ProgramExercise, Workout, WorkoutExercise, Set
+- **Repository interfaces:** IExerciseRepository, IProgramRepository, IWorkoutRepository, IWorkoutExerciseRepository, ISetRepository
+- Git repository with proper .gitignore and GitHub integration
 
 ## Application Requirements
 
@@ -118,43 +120,24 @@ POST /sets               # Log a set form + JSON API
 
 ### Data Models (Current EF Core Entities)
 ```csharp
-// Completed entities ✅
-public class Exercise
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string PrimaryMuscle { get; set; } = string.Empty;
-}
+// All domain models completed ✅
+public class Exercise { ... }
+public class Program { ... }  
+public class ProgramExercise { ... }
+public class Workout { ... }
+public class WorkoutExercise { ... }
+public class Set { ... }
 
-public class Program
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-    public DateTime ModifiedDate { get; set; }
-    public List<ProgramExercise> ProgramExercises { get; set; } = [];
-}
+// All repository interfaces completed ✅
+public interface IExerciseRepository { ... }
+public interface IProgramRepository { ... }
+public interface IWorkoutRepository { ... }
+public interface IWorkoutExerciseRepository { ... }
+public interface ISetRepository { ... }
 
-public class ProgramExercise
-{
-    public int Id { get; set; }
-    public int ProgramId { get; set; }
-    public int ExerciseId { get; set; }
-    public int Order { get; set; }  // Starts at 1
-    public int PlannedSets { get; set; }
-    public int PlannedReps { get; set; }
-    public float PlannedWeight { get; set; }  // 0 for bodyweight
-    public int PlannedRestTimeSeconds { get; set; }
-    public Program Program { get; set; } = null!;
-    public Exercise Exercise { get; set; } = null!;
-}
-
-// Next to build 📋
-public class Workout  // Update with Program reference
-public class WorkoutExercise  // Exercise in actual workout
-public class Set  // Actual performance data
+// Next: EF Core implementation 📋
+public class WorkoutContext : DbContext { ... }
+public class ExerciseRepository : IExerciseRepository { ... }
 ```
 
 ## Enterprise Patterns to Learn
@@ -190,22 +173,25 @@ dotnet ef database update
 - ✅ Simplified solution created with 3 projects
 - ✅ Project references configured
 - ✅ SQL Server Docker container available
-- ✅ **Domain models created:** Exercise, Program, ProgramExercise
-- 🔄 **Next:** Complete remaining entities (Workout, WorkoutExercise, Set)
-- 📋 **After that:** Define repository interfaces in Core
+- ✅ **Complete domain model:** Exercise, Program, ProgramExercise, Workout, WorkoutExercise, Set
+- ✅ **Repository interfaces:** All 5 repository interfaces defined with async patterns
+- 🔄 **Next:** Set up Entity Framework Core in Infrastructure project
+- 📋 **After that:** Create DbContext and configure entity relationships
 
 ## Learning Focus Areas
-1. **Clean Architecture** 🔄 (setting up project references)
-2. **Entity Framework Core** 📋 (next - Code First approach)
-3. **Repository Pattern** 📋 (abstraction over EF Core)
-4. **Automated Testing** 📋 (unit, integration, end-to-end tests)
-5. **Hybrid Controllers** 📋 (serving both web and API responses)
-6. **Razor Pages** 📋 (server-side rendering)
-7. **Dependency Injection** 📋 (.NET's built-in DI container)
-8. **SQL understanding** 📋 (through EF Core query logging)
-9. **Blazor** 📋 (future phase 3)
-10. **.NET MAUI** 📋 (future phase 4 - cross-platform mobile)
-11. **iOS Native** 📋 (future phase 5 - comparison study)
+1. **Clean Architecture** ✅ (completed project structure and references)
+2. **Domain Modeling** ✅ (completed all 6 entities with relationships)
+3. **Repository Pattern** ✅ (defined all interfaces with async patterns)
+4. **Entity Framework Core** 🔄 (next - setup and configuration)
+5. **Code First Migrations** 📋 (generate SQL schema from models)
+6. **Automated Testing** 📋 (unit, integration, end-to-end tests)
+7. **Hybrid Controllers** 📋 (serving both web and API responses)
+8. **Razor Pages** 📋 (server-side rendering)
+9. **Dependency Injection** 📋 (.NET's built-in DI container)
+10. **SQL understanding** 📋 (through EF Core query logging)
+11. **Blazor** 📋 (future phase 3)
+12. **.NET MAUI** 📋 (future phase 4 - cross-platform mobile)
+13. **iOS Native** 📋 (future phase 5 - comparison study)
 
 ## Quick Reference
 ```bash
