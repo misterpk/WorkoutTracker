@@ -4,7 +4,7 @@ namespace WorkoutTracker.Core.Models
     {
         public int WorkoutExerciseId { get; set; }
         public int Reps { get; set; }
-        public float Weight { get; set; } // 0 indicates bodyweight
+        public decimal Weight { get; set; } // 0 indicates bodyweight
         public int Order { get; set; }
         public string Notes { get; set; } = string.Empty;
         public int RestTimeSeconds { get; set; }

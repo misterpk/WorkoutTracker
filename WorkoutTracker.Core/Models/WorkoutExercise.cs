@@ -7,6 +7,6 @@ namespace WorkoutTracker.Core.Models
         public int Order { get; set; }
         public Workout Workout { get; set; } = null!;
         public Exercise Exercise { get; set; } = null!;
-        public List<Set> Sets { get; set; } = [];
+        public ICollection<Set> Sets { get; set; } = null!;
     }
 }
