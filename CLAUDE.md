@@ -64,6 +64,7 @@ Building a workout tracking web application as a learning project. Primary goal 
 - **ICollection<T>** - Preferred over List<T> for navigation properties
 - **Fluent API over Data Annotations** - More explicit, better for learning
 - **Separate configuration classes** - Better organization than OnModelCreating
+- **Git Commit Messages** - Use Conventional Commits. Rules located in ./cc.md
 
 ## Docker & Database Context
 ```bash

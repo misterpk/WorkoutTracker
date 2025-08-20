@@ -9,6 +9,7 @@ namespace WorkoutTracker.Core.Interfaces
         Task<Exercise> AddAsync(Exercise exercise);
         Task UpdateAsync(Exercise exercise);
         Task DeleteAsync(int id);
+        Task<Exercise?> GetByNameAsync(string name);
         Task<IEnumerable<Exercise>> GetByPrimaryMuscleAsync(string primaryMuscle);
         Task<bool> ExistsAsync(int id);
     }
