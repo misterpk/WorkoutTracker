@@ -15,6 +15,11 @@ builder.Services.AddDbContext<WorkoutTrackerDbContext>(options =>
 
 // Register repositories
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
+builder.Services.AddScoped<IProgramExerciseRepository, ProgramExerciseRepository>();
+builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+builder.Services.AddScoped<IWorkoutExerciseRepository, WorkoutExerciseRepository>();
+builder.Services.AddScoped<ISetRepository, SetRepository>();
 
 var app = builder.Build();
 
@@ -22,7 +27,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<WorkoutTrackerDbContext>();
-    
+
     // Check if we already have data
     if (!context.Exercises.Any())
     {
@@ -104,14 +109,13 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine("Database already has data, skipping seeding.");
     }
-    
+
     // MOVE THE REPOSITORY TEST OUT HERE - always runs regardless of seeding
     var exerciseRepo = scope.ServiceProvider.GetRequiredService<IExerciseRepository>();
-    
     Console.WriteLine("\n" + new string('=', 50));
     Console.WriteLine("TESTING EXERCISE REPOSITORY");
     Console.WriteLine(new string('=', 50));
-    
+
     // Test GetAllAsync
     var allExercises = await exerciseRepo.GetAllAsync();
     Console.WriteLine($"Found {allExercises.Count()} exercises:");
@@ -119,19 +123,18 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine($"  - {ex.Name} ({ex.PrimaryMuscle}) - Created: {ex.CreatedAt}");
     }
-    
+
     // Test GetByNameAsync
     var benchPress = await exerciseRepo.GetByNameAsync("Bench Press");
     Console.WriteLine($"\nBench Press lookup: {benchPress?.Name ?? "Not found"}");
-    
+
     // Test GetByPrimaryMuscleAsync
     var chestExercises = await exerciseRepo.GetByPrimaryMuscleAsync("Chest");
     Console.WriteLine($"\nChest exercises: {chestExercises.Count()}");
-    
+
     // Test ExistsAsync
     var exists = await exerciseRepo.ExistsAsync(1);
     Console.WriteLine($"\nExercise ID 1 exists: {exists}");
-    
     Console.WriteLine(new string('=', 50));
     Console.WriteLine("REPOSITORY TEST COMPLETE");
     Console.WriteLine(new string('=', 50) + "\n");

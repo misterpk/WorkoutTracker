@@ -12,5 +12,6 @@ namespace WorkoutTracker.Core.Interfaces
         Task<bool> ExistsAsync(int id);
         Task<IEnumerable<WorkoutExercise>> GetByWorkoutIdAsync(int workoutId);
         Task<IEnumerable<WorkoutExercise>> GetByExerciseIdAsync(int exerciseId);
+        Task<WorkoutExercise?> GetByWorkoutAndExerciseIdAsync(int workoutId, int exerciseId);
     }
 }

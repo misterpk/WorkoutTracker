@@ -11,5 +11,6 @@ namespace WorkoutTracker.Core.Interfaces
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<IEnumerable<Workout>> GetByProgramIdAsync(int? programId);
+        Task<IEnumerable<Workout>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
     }
 }
