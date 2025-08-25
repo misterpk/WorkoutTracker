@@ -10,5 +10,7 @@ namespace WorkoutTracker.Core.Interfaces
         Task UpdateAsync(Program program);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
+        Task<Program?> GetByNameAsync(string name);
     }
 }
+
