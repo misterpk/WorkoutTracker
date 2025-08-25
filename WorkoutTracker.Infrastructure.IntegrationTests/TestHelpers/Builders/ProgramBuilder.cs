@@ -8,7 +8,7 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Builders
         private readonly WorkoutTrackerDbContext _context;
         private readonly Program _program;
 
-        public ProgramBuilder(WorkoutTrackerDbContext context, string name = "Test Program")
+        public ProgramBuilder(WorkoutTrackerDbContext context, string name = TestConstants.DefaultProgramName)
         {
             _context = context;
             _program = new Program

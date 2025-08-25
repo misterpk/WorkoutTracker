@@ -9,5 +9,8 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers
         public const int DefaultSets = 3;
         public const int DefaultOrder = 1;
         public const string DefaultNotes = "Test set notes";
+        public const string DefaultExerciseName = "Test Exercise";
+        public const string DefaultMuscleGroup = "Test Muscle";
+        public const string DefaultProgramName = "Test Program";
     }
 }

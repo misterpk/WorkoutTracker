@@ -13,10 +13,10 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers
             _context = context;
         }
 
-        public ExerciseBuilder Exercise(string name = "Test Exercise", string primaryMuscle = "Test Muscle") 
+        public ExerciseBuilder Exercise(string name = TestConstants.DefaultExerciseName, string primaryMuscle = TestConstants.DefaultMuscleGroup) 
             => new ExerciseBuilder(_context, name, primaryMuscle);
 
-        public ProgramBuilder Program(string name = "Test Program") 
+        public ProgramBuilder Program(string name = TestConstants.DefaultProgramName) 
             => new ProgramBuilder(_context, name);
 
         public WorkoutBuilder Workout() 

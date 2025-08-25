@@ -8,7 +8,7 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Builders
         private readonly WorkoutTrackerDbContext _context;
         private readonly Exercise _exercise;
 
-        public ExerciseBuilder(WorkoutTrackerDbContext context, string name = "Test Exercise", string primaryMuscle = "Test Muscle")
+        public ExerciseBuilder(WorkoutTrackerDbContext context, string name = TestConstants.DefaultExerciseName, string primaryMuscle = TestConstants.DefaultMuscleGroup)
         {
             _context = context;
             _exercise = new Exercise

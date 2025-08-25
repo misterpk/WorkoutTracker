@@ -13,18 +13,29 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Composers
             _context = context;
         }
 
-        public async Task<WorkoutExercise> CreateWorkoutExerciseAsync(
-            string exerciseName = "Test Exercise",
-            string exerciseMuscle = "Test Muscle",
-            Program? program = null,
-            DateTime? workoutDate = null,
-            int order = 1)
+        private async Task<(Exercise exercise, Workout workout)> CreateExerciseAndWorkoutAsync(
+            string exerciseName, 
+            string exerciseMuscle, 
+            Program? program = null, 
+            DateTime? workoutDate = null)
         {
             var exercise = await new ExerciseBuilder(_context, exerciseName, exerciseMuscle).SaveAsync();
             var workout = await new WorkoutBuilder(_context)
                 .WithProgram(program)
                 .WithDate(workoutDate ?? DateTime.UtcNow)
                 .SaveAsync();
+            
+            return (exercise, workout);
+        }
+
+        public async Task<WorkoutExercise> CreateWorkoutExerciseAsync(
+            string exerciseName = TestConstants.DefaultExerciseName,
+            string exerciseMuscle = TestConstants.DefaultMuscleGroup,
+            Program? program = null,
+            DateTime? workoutDate = null,
+            int order = TestConstants.DefaultOrder)
+        {
+            var (exercise, workout) = await CreateExerciseAndWorkoutAsync(exerciseName, exerciseMuscle, program, workoutDate);
 
             var workoutExercise = await new WorkoutExerciseBuilder(_context, workout, exercise)
                 .WithOrder(order)
@@ -34,17 +45,13 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Composers
         }
 
         public async Task<(Workout workout, WorkoutExercise workoutExercise)> CreateWorkoutWithExerciseAsync(
-            string exerciseName = "Test Exercise",
-            string exerciseMuscle = "Test Muscle",
+            string exerciseName = TestConstants.DefaultExerciseName,
+            string exerciseMuscle = TestConstants.DefaultMuscleGroup,
             Program? program = null,
             DateTime? workoutDate = null,
-            int order = 1)
+            int order = TestConstants.DefaultOrder)
         {
-            var exercise = await new ExerciseBuilder(_context, exerciseName, exerciseMuscle).SaveAsync();
-            var workout = await new WorkoutBuilder(_context)
-                .WithProgram(program)
-                .WithDate(workoutDate ?? DateTime.UtcNow)
-                .SaveAsync();
+            var (exercise, workout) = await CreateExerciseAndWorkoutAsync(exerciseName, exerciseMuscle, program, workoutDate);
 
             var workoutExercise = await new WorkoutExerciseBuilder(_context, workout, exercise)
                 .WithOrder(order)
@@ -54,68 +61,57 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Composers
         }
 
         public async Task<Set> CreateCompleteSetAsync(
-            string exerciseName = "Test Exercise",
-            string exerciseMuscle = "Test Muscle",
+            string exerciseName = TestConstants.DefaultExerciseName,
+            string exerciseMuscle = TestConstants.DefaultMuscleGroup,
             Program? program = null,
-            int reps = 10,
-            decimal weight = 100.0m,
-            int rpe = 8,
-            int order = 1,
-            int restTimeSeconds = 120,
-            string notes = "Test set notes")
+            int reps = TestConstants.DefaultReps,
+            decimal weight = TestConstants.DefaultWeight,
+            int rpe = TestConstants.DefaultRpe,
+            int order = TestConstants.DefaultOrder,
+            int restTimeSeconds = TestConstants.DefaultRestTimeSeconds,
+            string notes = TestConstants.DefaultNotes)
         {
             var (workout, workoutExercise) = await CreateWorkoutWithExerciseAsync(
                 exerciseName, exerciseMuscle, program);
 
-            var set = new Set
-            {
-                WorkoutExercise = workoutExercise,
-                WorkoutExerciseId = workoutExercise.Id,
-                Reps = reps,
-                Weight = weight,
-                Order = order,
-                RPE = rpe,
-                RestTimeSeconds = restTimeSeconds,
-                Notes = notes
-            };
+            var set = await new SetBuilder(_context, workoutExercise)
+                .WithReps(reps)
+                .WithWeight(weight)
+                .WithOrder(order)
+                .WithRPE(rpe)
+                .WithRestTime(restTimeSeconds)
+                .WithNotes(notes)
+                .SaveAsync();
 
-            _context.Sets.Add(set);
-            await _context.SaveChangesAsync();
             return set;
         }
 
         public async Task<(Workout workout, WorkoutExercise workoutExercise, Set set)> CreateCompleteWorkoutAsync(
-            string exerciseName = "Test Exercise",
-            string exerciseMuscle = "Test Muscle",
+            string exerciseName = TestConstants.DefaultExerciseName,
+            string exerciseMuscle = TestConstants.DefaultMuscleGroup,
             Program? program = null,
-            int reps = 10,
-            decimal weight = 100.0m,
-            int rpe = 8)
+            int reps = TestConstants.DefaultReps,
+            decimal weight = TestConstants.DefaultWeight,
+            int rpe = TestConstants.DefaultRpe)
         {
             var (workout, workoutExercise) = await CreateWorkoutWithExerciseAsync(
                 exerciseName, exerciseMuscle, program);
 
-            var set = new Set
-            {
-                WorkoutExercise = workoutExercise,
-                WorkoutExerciseId = workoutExercise.Id,
-                Reps = reps,
-                Weight = weight,
-                Order = 1,
-                RPE = rpe,
-                RestTimeSeconds = 120,
-                Notes = "Test set notes"
-            };
-
-            _context.Sets.Add(set);
-            await _context.SaveChangesAsync();
+            var set = await new SetBuilder(_context, workoutExercise)
+                .WithReps(reps)
+                .WithWeight(weight)
+                .WithOrder(TestConstants.DefaultOrder)
+                .WithRPE(rpe)
+                .WithRestTime(TestConstants.DefaultRestTimeSeconds)
+                .WithNotes(TestConstants.DefaultNotes)
+                .SaveAsync();
 
             return (workout, workoutExercise, set);
         }
 
         public async Task<List<Set>> CreateMultipleSetsAsync(
-            string exerciseName = "Test Exercise",
-            string exerciseMuscle = "Test Muscle",
+            string exerciseName = TestConstants.DefaultExerciseName,
+            string exerciseMuscle = TestConstants.DefaultMuscleGroup,
             Program? program = null,
             params (int reps, decimal weight, int order)[] setData)
         {
@@ -125,22 +121,17 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Composers
             var sets = new List<Set>();
             foreach (var (reps, weight, order) in setData)
             {
-                var set = new Set
-                {
-                    WorkoutExercise = workoutExercise,
-                    WorkoutExerciseId = workoutExercise.Id,
-                    Reps = reps,
-                    Weight = weight,
-                    Order = order,
-                    RPE = 8,
-                    RestTimeSeconds = 120,
-                    Notes = "Test set notes"
-                };
+                var set = await new SetBuilder(_context, workoutExercise)
+                    .WithReps(reps)
+                    .WithWeight(weight)
+                    .WithOrder(order)
+                    .WithRPE(TestConstants.DefaultRpe)
+                    .WithRestTime(TestConstants.DefaultRestTimeSeconds)
+                    .WithNotes(TestConstants.DefaultNotes)
+                    .SaveAsync();
                 sets.Add(set);
             }
 
-            _context.Sets.AddRange(sets);
-            await _context.SaveChangesAsync();
             return sets;
         }
 
