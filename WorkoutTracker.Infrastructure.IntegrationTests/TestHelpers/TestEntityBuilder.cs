@@ -25,7 +25,7 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers
         public ProgramExerciseComposer ProgramExercise 
             => new ProgramExerciseComposer(_context);
 
-        public WorkoutComposer WorkoutExercise 
+        public WorkoutComposer WorkoutComposer 
             => new WorkoutComposer(_context);
     }
 }

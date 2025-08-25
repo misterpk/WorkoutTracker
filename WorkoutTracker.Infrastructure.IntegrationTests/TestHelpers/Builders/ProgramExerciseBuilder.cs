@@ -17,11 +17,11 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Builders
                 ProgramId = program.Id,
                 Exercise = exercise,
                 ExerciseId = exercise.Id,
-                Order = 1,
-                PlannedSets = 3,
-                PlannedReps = 10,
-                PlannedWeight = 100.0m,
-                PlannedRestTimeSeconds = 120
+                Order = TestConstants.DefaultOrder,
+                PlannedSets = TestConstants.DefaultSets,
+                PlannedReps = TestConstants.DefaultReps,
+                PlannedWeight = TestConstants.DefaultWeight,
+                PlannedRestTimeSeconds = TestConstants.DefaultRestTimeSeconds
             };
         }
 

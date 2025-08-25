@@ -15,12 +15,12 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Builders
             {
                 WorkoutExercise = workoutExercise,
                 WorkoutExerciseId = workoutExercise.Id,
-                Reps = 10,
-                Weight = 100.0m,
-                Order = 1,
-                RPE = 8,
-                RestTimeSeconds = 120,
-                Notes = "Test set notes"
+                Reps = TestConstants.DefaultReps,
+                Weight = TestConstants.DefaultWeight,
+                Order = TestConstants.DefaultOrder,
+                RPE = TestConstants.DefaultRpe,
+                RestTimeSeconds = TestConstants.DefaultRestTimeSeconds,
+                Notes = TestConstants.DefaultNotes
             };
         }
 

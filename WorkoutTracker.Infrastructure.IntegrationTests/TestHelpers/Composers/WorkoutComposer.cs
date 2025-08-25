@@ -26,17 +26,10 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Composers
                 .WithDate(workoutDate ?? DateTime.UtcNow)
                 .SaveAsync();
 
-            var workoutExercise = new WorkoutExercise
-            {
-                Workout = workout,
-                WorkoutId = workout.Id,
-                Exercise = exercise,
-                ExerciseId = exercise.Id,
-                Order = order
-            };
+            var workoutExercise = await new WorkoutExerciseBuilder(_context, workout, exercise)
+                .WithOrder(order)
+                .SaveAsync();
 
-            _context.WorkoutExercises.Add(workoutExercise);
-            await _context.SaveChangesAsync();
             return workoutExercise;
         }
 
@@ -53,17 +46,9 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Composers
                 .WithDate(workoutDate ?? DateTime.UtcNow)
                 .SaveAsync();
 
-            var workoutExercise = new WorkoutExercise
-            {
-                Workout = workout,
-                WorkoutId = workout.Id,
-                Exercise = exercise,
-                ExerciseId = exercise.Id,
-                Order = order
-            };
-
-            _context.WorkoutExercises.Add(workoutExercise);
-            await _context.SaveChangesAsync();
+            var workoutExercise = await new WorkoutExerciseBuilder(_context, workout, exercise)
+                .WithOrder(order)
+                .SaveAsync();
             
             return (workout, workoutExercise);
         }

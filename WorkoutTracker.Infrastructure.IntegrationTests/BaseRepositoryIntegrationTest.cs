@@ -32,13 +32,15 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests
             CrossRepositoryComposer = new CrossRepositoryComposer(Context);
         }
 
-        protected async Task SeedDatabaseAsync()
+        protected async Task<(Workout workout, Exercise exercise, Program program, Set set)> SeedDatabaseAsync()
         {
             var (workout, workoutExercise, set) = await WorkoutComposer.CreateCompleteWorkoutAsync(
                 "Bench Press", "Chest");
             
             var (program, exercise, programExercise) = await ProgramExerciseComposer.CreateCompleteAsync(
                 "Bench Press", "Chest", "Push Day");
+            
+            return (workout, exercise, program, set);
         }
 
         protected virtual void Dispose(bool disposing)

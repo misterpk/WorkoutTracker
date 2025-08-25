@@ -17,7 +17,7 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests.TestHelpers.Builders
                 WorkoutId = workout.Id,
                 Exercise = exercise,
                 ExerciseId = exercise.Id,
-                Order = 1
+                Order = TestConstants.DefaultOrder
             };
         }
 
