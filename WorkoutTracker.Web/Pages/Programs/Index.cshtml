@@ -1,0 +1,145 @@
+@page
+@model WorkoutTracker.Web.Pages.Programs.IndexModel
+@{
+    ViewData["Title"] = "Programs";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-6">🏋️ My Programs</h1>
+    <a asp-page="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Create Program
+    </a>
+</div>
+
+<!-- Search Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-8">
+                        <label for="searchTerm" class="form-label">Search Programs</label>
+                        <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
+                               value="@Model.SearchTerm" placeholder="Search by name or description...">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary me-2">Search</button>
+                        <a asp-page="Index" class="btn btn-outline-secondary">Clear</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Summary -->
+<div class="mb-3">
+    <small class="text-muted">
+        Showing @Model.Programs.Count() program(s)
+        @if (!string.IsNullOrEmpty(Model.SearchTerm))
+        {
+            <span>matching your search</span>
+        }
+    </small>
+</div>
+
+<!-- Programs Grid -->
+@if (Model.Programs.Any())
+{
+    <div class="row">
+        @foreach (var program in Model.Programs)
+        {
+            <div class="col-lg-6 col-xl-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-1">@program.Name</h5>
+                            <span class="badge bg-info">@program.ProgramExercises.Count exercises</span>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(program.Description))
+                        {
+                            <p class="card-text text-muted small">
+                                @(program.Description.Length > 100 ? 
+                                  program.Description.Substring(0, 100) + "..." : 
+                                  program.Description)
+                            </p>
+                        }
+                        
+                        <!-- Program Stats -->
+                        <div class="row text-center my-3">
+                            <div class="col-4">
+                                <div class="small text-muted">Exercises</div>
+                                <div class="fw-bold">@program.ProgramExercises.Count</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="small text-muted">Est. Duration</div>
+                                <div class="fw-bold">@Model.CalculateEstimatedDuration(program) min</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="small text-muted">Total Sets</div>
+                                <div class="fw-bold">@program.ProgramExercises.Sum(pe => pe.PlannedSets)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <small class="text-muted d-block">
+                                Created: @program.CreatedAt.ToString("MMM dd, yyyy")
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent">
+                        <div class="btn-group w-100" role="group">
+                            <a asp-page="Details" asp-route-id="@program.Id" class="btn btn-outline-primary btn-sm">
+                                View
+                            </a>
+                            <a asp-page="Edit" asp-route-id="@program.Id" class="btn btn-outline-secondary btn-sm">
+                                Edit
+                            </a>
+                            <button type="button" class="btn btn-outline-info btn-sm" 
+                                    onclick="duplicateProgram(@program.Id, '@program.Name')">
+                                Copy
+                            </button>
+                            <a asp-page="Delete" asp-route-id="@program.Id" class="btn btn-outline-danger btn-sm">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
+        </div>
+        <h4>No programs found</h4>
+        <p class="text-muted">
+            @if (!string.IsNullOrEmpty(Model.SearchTerm))
+            {
+                <span>Try adjusting your search criteria.</span>
+            }
+            else
+            {
+                <span>Get started by creating your first workout program!</span>
+            }
+        </p>
+        <a asp-page="Create" class="btn btn-primary">Create Your First Program</a>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function duplicateProgram(programId, programName) {
+            if (confirm(`Are you sure you want to duplicate "${programName}"?`)) {
+                // This would typically be a POST request to a duplicate action
+                // For now, redirect to create with the original program ID as a query parameter
+                window.location.href = `/Programs/Create?copyFromId=${programId}`;
+            }
+        }
+    </script>
+}

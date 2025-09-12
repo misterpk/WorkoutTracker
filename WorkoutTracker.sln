@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutTracker.Web", "Worko
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutTracker.Infrastructure.IntegrationTests", "WorkoutTracker.Infrastructure.IntegrationTests\WorkoutTracker.Infrastructure.IntegrationTests.csproj", "{FA975BCC-952A-4658-9CF1-0249B50DCAA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutTracker.Web.IntegrationTests", "WorkoutTracker.Web.IntegrationTests\WorkoutTracker.Web.IntegrationTests.csproj", "{3EF4A658-5F77-4936-829A-A8FC33523C18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutTracker.Web.UnitTests", "WorkoutTracker.Web.UnitTests\WorkoutTracker.Web.UnitTests.csproj", "{D23341A2-DD01-4D2E-832F-697CBC83974E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutTracker.Web.E2ETests", "WorkoutTracker.Web.E2ETests\WorkoutTracker.Web.E2ETests.csproj", "{032E5444-4609-4ABF-B3D1-293B939AC4DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +42,17 @@ Global
 		{FA975BCC-952A-4658-9CF1-0249B50DCAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA975BCC-952A-4658-9CF1-0249B50DCAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA975BCC-952A-4658-9CF1-0249B50DCAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EF4A658-5F77-4936-829A-A8FC33523C18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF4A658-5F77-4936-829A-A8FC33523C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF4A658-5F77-4936-829A-A8FC33523C18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF4A658-5F77-4936-829A-A8FC33523C18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D23341A2-DD01-4D2E-832F-697CBC83974E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D23341A2-DD01-4D2E-832F-697CBC83974E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D23341A2-DD01-4D2E-832F-697CBC83974E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D23341A2-DD01-4D2E-832F-697CBC83974E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{032E5444-4609-4ABF-B3D1-293B939AC4DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{032E5444-4609-4ABF-B3D1-293B939AC4DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032E5444-4609-4ABF-B3D1-293B939AC4DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{032E5444-4609-4ABF-B3D1-293B939AC4DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

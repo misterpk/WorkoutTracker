@@ -6,5 +6,6 @@ namespace WorkoutTracker.Core.Models
         public string Description { get; set; } = string.Empty;
         public string PrimaryMuscle { get; set; } = string.Empty;
         public ICollection<ProgramExercise> ProgramExercises { get; set; } = null!;
+        public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = null!;
     }
 }

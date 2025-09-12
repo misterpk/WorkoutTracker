@@ -1,0 +1,150 @@
+@page "{id:int}"
+@model WorkoutTracker.Web.Pages.Programs.DeleteModel
+@{
+    ViewData["Title"] = "Delete Program";
+}
+
+@if (Model.Program == null)
+{
+    <div class="alert alert-warning">
+        <h4>Program Not Found</h4>
+        <p>The program you're trying to delete doesn't exist.</p>
+        <a asp-page="Index" class="btn btn-primary">Back to Programs</a>
+    </div>
+}
+else
+{
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-page="Details" asp-route-id="@Model.Program.Id" class="btn btn-outline-secondary me-3">
+                    <i class="bi bi-arrow-left"></i> Back to Details
+                </a>
+                <h1 class="display-6 mb-0 text-danger">Delete Program</h1>
+            </div>
+
+            <!-- Warning Alert -->
+            <div class="alert alert-danger" role="alert">
+                <h5 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Confirm Deletion</h5>
+                <p>You are about to permanently delete the program <strong>"@Model.Program.Name"</strong>.</p>
+                <hr>
+                <p class="mb-0">This action <strong>cannot be undone</strong>. All exercises and workout history associated with this program will be preserved, but the program template itself will be removed.</p>
+            </div>
+
+            <!-- Program Summary -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Program Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="fw-bold">@Model.Program.Name</h6>
+                            @if (!string.IsNullOrEmpty(Model.Program.Description))
+                            {
+                                <p class="text-muted">@Model.Program.Description</p>
+                            }
+                            
+                            <small class="text-muted">
+                                Created: @Model.Program.CreatedAt.ToString("MMMM dd, yyyy")
+                            </small>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="mb-2">
+                                    <h4 class="text-primary mb-1">@Model.Program.ProgramExercises.Count</h4>
+                                    <small class="text-muted">Exercise(s)</small>
+                                </div>
+                                <div class="mb-2">
+                                    <h4 class="text-success mb-1">@Model.Program.ProgramExercises.Sum(pe => pe.PlannedSets)</h4>
+                                    <small class="text-muted">Total Sets</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercises in Program -->
+            @if (Model.Program.ProgramExercises.Any())
+            {
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">Exercises in this Program</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (var programExercise in Model.Program.ProgramExercises.OrderBy(pe => pe.Order))
+                            {
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-light text-dark me-2">@programExercise.Order</span>
+                                        <div>
+                                            <strong>@programExercise.Exercise.Name</strong>
+                                            <div class="small text-muted">@programExercise.PlannedSets × @programExercise.PlannedReps</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Safety Check for Workouts -->
+            @if (Model.HasAssociatedWorkouts)
+            {
+                <div class="alert alert-warning">
+                    <h6><i class="bi bi-exclamation-circle"></i> This Program Has Workout History</h6>
+                    <p class="mb-0">
+                        This program has been used in previous workouts. Deleting it will not affect your workout history, 
+                        but you won't be able to use this program template to start new workouts.
+                    </p>
+                </div>
+            }
+
+            <!-- Deletion Form -->
+            <div class="card border-danger">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="form-check mb-3">
+                            <input asp-for="ConfirmDeletion" class="form-check-input" type="checkbox" id="confirmDeletion">
+                            <label class="form-check-label" for="confirmDeletion">
+                                I understand that this action cannot be undone
+                            </label>
+                            <span asp-validation-for="ConfirmDeletion" class="text-danger d-block"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Details" asp-route-id="@Model.Program.Id" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this program?')">
+                                <i class="bi bi-trash"></i> Delete Program Permanently
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Alternative Actions -->
+            <div class="card mt-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="bi bi-lightbulb"></i> Alternative Actions</h6>
+                </div>
+                <div class="card-body">
+                    <p>Instead of deleting, you might want to:</p>
+                    <ul class="mb-0">
+                        <li><a asp-page="Edit" asp-route-id="@Model.Program.Id" class="text-decoration-none">Edit the program</a> to update its details</li>
+                        <li><a asp-page="Create" asp-route-copyFromId="@Model.Program.Id" class="text-decoration-none">Duplicate the program</a> to create a modified version</li>
+                        <li>Simply stop using it - it won't appear in new workout selections</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

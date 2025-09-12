@@ -32,7 +32,7 @@ public class WorkoutExerciseConfiguration : IEntityTypeConfiguration<WorkoutExer
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(we => we.Exercise)
-            .WithMany()
+            .WithMany(e => e.WorkoutExercises)
             .HasForeignKey(we => we.ExerciseId)
             .OnDelete(DeleteBehavior.Restrict);
 

@@ -1,0 +1,125 @@
+@page "{id:int}"
+@model WorkoutTracker.Web.Pages.Programs.AddExerciseModel
+@{
+    ViewData["Title"] = "Add Exercise to Program";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+            <a asp-page="Details" asp-route-id="@Model.Program?.Id" class="btn btn-outline-secondary me-3">
+                <i class="bi bi-arrow-left"></i> Back to Program
+            </a>
+            <h1 class="display-6 mb-0">Add Exercise</h1>
+        </div>
+
+        @if (Model.Program != null)
+        {
+            <div class="alert alert-info">
+                <strong>Adding exercise to:</strong> @Model.Program.Name
+            </div>
+        }
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" asp-for="ProgramExercise.ProgramId" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="ProgramExercise.ExerciseId" class="form-label">Exercise *</label>
+                            <select asp-for="ProgramExercise.ExerciseId" class="form-select" asp-items="Model.ExerciseOptions">
+                            </select>
+                            <span asp-validation-for="ProgramExercise.ExerciseId" class="text-danger"></span>
+                            <div class="form-text">
+                                Select the exercise to add to this program.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="ProgramExercise.Order" class="form-label">Order *</label>
+                            <input asp-for="ProgramExercise.Order" class="form-control" type="number" min="1" max="100">
+                            <span asp-validation-for="ProgramExercise.Order" class="text-danger"></span>
+                            <div class="form-text">
+                                Exercise order in the program.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedSets" class="form-label">Planned Sets *</label>
+                            <input asp-for="ProgramExercise.PlannedSets" class="form-control" type="number" min="1" max="20">
+                            <span asp-validation-for="ProgramExercise.PlannedSets" class="text-danger"></span>
+                            <div class="form-text">
+                                Number of sets to perform.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedReps" class="form-label">Planned Reps *</label>
+                            <input asp-for="ProgramExercise.PlannedReps" class="form-control" type="number" min="1" max="100">
+                            <span asp-validation-for="ProgramExercise.PlannedReps" class="text-danger"></span>
+                            <div class="form-text">
+                                Number of reps per set.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedWeight" class="form-label">Planned Weight (lbs)</label>
+                            <input asp-for="ProgramExercise.PlannedWeight" class="form-control" type="number" min="0" max="1000" step="0.25">
+                            <span asp-validation-for="ProgramExercise.PlannedWeight" class="text-danger"></span>
+                            <div class="form-text">
+                                Target weight (leave 0 for bodyweight exercises).
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedRestTimeSeconds" class="form-label">Rest Time (seconds)</label>
+                            <select asp-for="ProgramExercise.PlannedRestTimeSeconds" class="form-select">
+                                <option value="30">30 seconds</option>
+                                <option value="45">45 seconds</option>
+                                <option value="60">1 minute</option>
+                                <option value="90" selected>90 seconds</option>
+                                <option value="120">2 minutes</option>
+                                <option value="180">3 minutes</option>
+                                <option value="240">4 minutes</option>
+                                <option value="300">5 minutes</option>
+                            </select>
+                            <span asp-validation-for="ProgramExercise.PlannedRestTimeSeconds" class="text-danger"></span>
+                            <div class="form-text">
+                                Rest time between sets.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-page="Details" asp-route-id="@Model.Program?.Id" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Add Exercise
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Exercise Planning Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li><strong>Order matters:</strong> Plan your exercises in the order you'll perform them</li>
+                    <li><strong>Compound first:</strong> Generally, do compound movements before isolation exercises</li>
+                    <li><strong>Rest times:</strong> Heavier/compound exercises typically need longer rest periods</li>
+                    <li><strong>Progressive overload:</strong> Start with manageable weights that allow room to progress</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

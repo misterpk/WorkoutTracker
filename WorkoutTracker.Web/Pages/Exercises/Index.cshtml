@@ -1,0 +1,123 @@
+@page
+@model WorkoutTracker.Web.Pages.Exercises.IndexModel
+@{
+    ViewData["Title"] = "Exercises";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-6">💪 Exercise Library</h1>
+    <a asp-page="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add New Exercise
+    </a>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="searchTerm" class="form-label">Search Exercises</label>
+                        <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
+                               value="@Model.SearchTerm" placeholder="Search by name or description...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="filterMuscle" class="form-label">Filter by Muscle Group</label>
+                        <select class="form-select" id="filterMuscle" name="filterMuscle">
+                            <option value="">All Muscle Groups</option>
+                            @foreach (var muscle in Model.GetUniqueMuscleGroups())
+                            {
+                                <option value="@muscle" selected="@(muscle == Model.FilterMuscle)">@muscle</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary me-2">Filter</button>
+                        <a asp-page="Index" class="btn btn-outline-secondary">Clear</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Summary -->
+<div class="mb-3">
+    <small class="text-muted">
+        Showing @Model.Exercises.Count() exercise(s)
+        @if (!string.IsNullOrEmpty(Model.SearchTerm) || !string.IsNullOrEmpty(Model.FilterMuscle))
+        {
+            <span>matching your filters</span>
+        }
+    </small>
+</div>
+
+<!-- Exercises Grid -->
+@if (Model.Exercises.Any())
+{
+    <div class="row">
+        @foreach (var exercise in Model.Exercises)
+        {
+            <div class="col-lg-6 col-xl-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-1">@exercise.Name</h5>
+                            <span class="badge bg-secondary">@exercise.PrimaryMuscle</span>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(exercise.Description))
+                        {
+                            <p class="card-text text-muted small">
+                                @(exercise.Description.Length > 100 ? 
+                                  exercise.Description.Substring(0, 100) + "..." : 
+                                  exercise.Description)
+                            </p>
+                        }
+                        
+                        <div class="mt-auto">
+                            <small class="text-muted d-block">
+                                Created: @exercise.CreatedAt.ToString("MMM dd, yyyy")
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent">
+                        <div class="btn-group w-100" role="group">
+                            <a asp-page="Details" asp-route-id="@exercise.Id" class="btn btn-outline-primary btn-sm">
+                                View
+                            </a>
+                            <a asp-page="Edit" asp-route-id="@exercise.Id" class="btn btn-outline-secondary btn-sm">
+                                Edit
+                            </a>
+                            <a asp-page="Delete" asp-route-id="@exercise.Id" class="btn btn-outline-danger btn-sm">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
+        </div>
+        <h4>No exercises found</h4>
+        <p class="text-muted">
+            @if (!string.IsNullOrEmpty(Model.SearchTerm) || !string.IsNullOrEmpty(Model.FilterMuscle))
+            {
+                <span>Try adjusting your search or filter criteria.</span>
+            }
+            else
+            {
+                <span>Get started by adding your first exercise!</span>
+            }
+        </p>
+        <a asp-page="Create" class="btn btn-primary">Add Your First Exercise</a>
+    </div>
+}

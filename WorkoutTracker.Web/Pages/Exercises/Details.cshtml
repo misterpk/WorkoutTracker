@@ -1,0 +1,121 @@
+@page "{id:int}"
+@model WorkoutTracker.Web.Pages.Exercises.DetailsModel
+@{
+    ViewData["Title"] = Model.Exercise.Name;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+            <a asp-page="Index" class="btn btn-outline-secondary me-3">
+                <i class="bi bi-arrow-left"></i> Back to Exercises
+            </a>
+            <h1 class="display-6 mb-0">Exercise Details</h1>
+        </div>
+
+        <!-- Exercise Card -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">@Model.Exercise.Name</h4>
+                <span class="badge bg-primary fs-6">@Model.Exercise.PrimaryMuscle</span>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.Exercise.Description))
+                {
+                    <div class="mb-4">
+                        <h6 class="text-muted mb-2">Description</h6>
+                        <p class="mb-0">@Model.Exercise.Description</p>
+                    </div>
+                }
+
+                <!-- Exercise Metadata -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-muted mb-2">Primary Muscle Group</h6>
+                        <p class="mb-3">
+                            <span class="badge bg-secondary fs-6">@Model.Exercise.PrimaryMuscle</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted mb-2">Exercise ID</h6>
+                        <p class="mb-3 text-muted">#@Model.Exercise.Id</p>
+                    </div>
+                </div>
+
+                <!-- Timestamps -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-muted mb-2">Created</h6>
+                        <p class="mb-3">
+                            @Model.Exercise.CreatedAt.ToString("MMMM dd, yyyy 'at' h:mm tt")
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted mb-2">Last Updated</h6>
+                        <p class="mb-3">
+                            @Model.Exercise.UpdatedAt.ToString("MMMM dd, yyyy 'at' h:mm tt")
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card-footer bg-transparent">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a asp-page="Edit" asp-route-id="@Model.Exercise.Id" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i> Edit Exercise
+                        </a>
+                        <a asp-page="Delete" asp-route-id="@Model.Exercise.Id" class="btn btn-outline-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </div>
+                    <a asp-page="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-list"></i> View All Exercises
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Statistics (Placeholder for future) -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-graph-up"></i> Usage Statistics</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="h4 text-primary mb-1">0</div>
+                        <small class="text-muted">Programs</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 text-success mb-1">0</div>
+                        <small class="text-muted">Workouts</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 text-info mb-1">0</div>
+                        <small class="text-muted">Total Sets</small>
+                    </div>
+                </div>
+                <hr>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> 
+                    Statistics will show once you start using this exercise in programs and workouts.
+                </small>
+            </div>
+        </div>
+
+        <!-- Related Exercises (Placeholder for future) -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-collection"></i> Similar Exercises</h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-0">
+                    <i class="bi bi-lightbulb"></i> 
+                    We'll suggest similar exercises here in the future based on muscle groups and movement patterns.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

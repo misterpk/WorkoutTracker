@@ -170,5 +170,238 @@ namespace WorkoutTracker.Infrastructure.IntegrationTests
             orphanedProgramExercise.Should().BeNull();
             remainingExercise.Should().NotBeNull();
         }
+
+        [Fact]
+        public async Task HasWorkoutsAsync_WithNoWorkouts_ReturnsFalse()
+        {
+            var program = await Builder.Program("Test Program").SaveAsync();
+
+            var result = await _repository.HasWorkoutsAsync(program.Id);
+
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task HasWorkoutsAsync_WithWorkouts_ReturnsTrue()
+        {
+            var program = await Builder.Program("Test Program").SaveAsync();
+            var workout = await Builder.Workout()
+                .WithProgram(program)
+                .SaveAsync();
+
+            var result = await _repository.HasWorkoutsAsync(program.Id);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task CopyAsync_WithValidProgram_CreatesExactCopy()
+        {
+            var exercise = await Builder.Exercise("Bench Press", "Chest").SaveAsync();
+            var sourceProgram = await Builder.Program("Original Program").SaveAsync();
+            
+            // Create ProgramExercise directly linking to our source program
+            var programExercise = new ProgramExercise
+            {
+                ProgramId = sourceProgram.Id,
+                ExerciseId = exercise.Id,
+                Order = 1,
+                PlannedSets = 3,
+                PlannedReps = 10,
+                PlannedWeight = 135m,
+                PlannedRestTimeSeconds = 90
+            };
+            Context.ProgramExercises.Add(programExercise);
+            await Context.SaveChangesAsync();
+
+            var copiedProgram = await _repository.CopyAsync(sourceProgram.Id, "Copied Program");
+
+            copiedProgram.Should().NotBeNull();
+            copiedProgram.Name.Should().Be("Copied Program");
+            copiedProgram.Description.Should().Be(sourceProgram.Description);
+            copiedProgram.Id.Should().NotBe(sourceProgram.Id);
+            
+            var copiedProgramExercises = await Context.ProgramExercises
+                .Where(pe => pe.ProgramId == copiedProgram.Id)
+                .ToListAsync();
+            
+            copiedProgramExercises.Should().HaveCount(1);
+            var copiedExercise = copiedProgramExercises.First();
+            copiedExercise.ExerciseId.Should().Be(exercise.Id);
+            copiedExercise.Order.Should().Be(1);
+            copiedExercise.PlannedSets.Should().Be(3);
+            copiedExercise.PlannedReps.Should().Be(10);
+            copiedExercise.PlannedWeight.Should().Be(135m);
+            copiedExercise.PlannedRestTimeSeconds.Should().Be(90);
+        }
+
+        [Fact]
+        public async Task CopyAsync_WithNonExistentProgram_ThrowsException()
+        {
+            var act = async () => await _repository.CopyAsync(999, "Copy Name");
+
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Program with ID 999 not found");
+        }
+
+        [Fact]
+        public async Task AddExerciseAsync_WithValidProgramExercise_AddsSuccessfully()
+        {
+            var program = await Builder.Program("Test Program").SaveAsync();
+            var exercise = await Builder.Exercise("Push Ups", "Chest").SaveAsync();
+            
+            var programExercise = new ProgramExercise
+            {
+                ProgramId = program.Id,
+                ExerciseId = exercise.Id,
+                Order = 1,
+                PlannedSets = 3,
+                PlannedReps = 12,
+                PlannedWeight = 0,
+                PlannedRestTimeSeconds = 60
+            };
+
+            var result = await _repository.AddExerciseAsync(programExercise);
+
+            result.Should().NotBeNull();
+            result.Id.Should().BeGreaterThan(0);
+            
+            var savedProgramExercise = await Context.ProgramExercises.FindAsync(result.Id);
+            savedProgramExercise.Should().NotBeNull();
+            savedProgramExercise!.ProgramId.Should().Be(program.Id);
+            savedProgramExercise.ExerciseId.Should().Be(exercise.Id);
+        }
+
+        [Fact]
+        public async Task UpdateProgramExerciseAsync_WithValidProgramExercise_UpdatesSuccessfully()
+        {
+            var (program, exercise, programExercise) = await ProgramExerciseComposer.CreateCompleteAsync(
+                "Squats", "Legs", "Leg Day");
+
+            programExercise.PlannedSets = 5;
+            programExercise.PlannedReps = 15;
+            programExercise.PlannedWeight = 225m;
+
+            await _repository.UpdateProgramExerciseAsync(programExercise);
+
+            var updatedProgramExercise = await Context.ProgramExercises.FindAsync(programExercise.Id);
+            updatedProgramExercise.Should().NotBeNull();
+            updatedProgramExercise!.PlannedSets.Should().Be(5);
+            updatedProgramExercise.PlannedReps.Should().Be(15);
+            updatedProgramExercise.PlannedWeight.Should().Be(225m);
+        }
+
+        [Fact]
+        public async Task DeleteProgramExerciseAsync_WithValidId_RemovesProgramExercise()
+        {
+            var (program, exercise, programExercise) = await ProgramExerciseComposer.CreateCompleteAsync(
+                "Deadlifts", "Back", "Pull Day");
+
+            await _repository.DeleteProgramExerciseAsync(programExercise.Id);
+
+            var deletedProgramExercise = await Context.ProgramExercises.FindAsync(programExercise.Id);
+            deletedProgramExercise.Should().BeNull();
+            
+            // Ensure the exercise and program are not deleted
+            var remainingExercise = await Context.Exercises.FindAsync(exercise.Id);
+            var remainingProgram = await Context.Programs.FindAsync(program.Id);
+            remainingExercise.Should().NotBeNull();
+            remainingProgram.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task DeleteProgramExerciseAsync_WithNonExistentId_DoesNotThrow()
+        {
+            var act = async () => await _repository.DeleteProgramExerciseAsync(999);
+
+            await act.Should().NotThrowAsync();
+        }
+
+        [Fact]
+        public async Task GetProgramExerciseByIdAsync_WithValidId_ReturnsProgramExercise()
+        {
+            var (program, exercise, programExercise) = await ProgramExerciseComposer.CreateCompleteAsync(
+                "Pull Ups", "Back", "Upper Body");
+
+            var result = await _repository.GetProgramExerciseByIdAsync(programExercise.Id);
+
+            result.Should().NotBeNull();
+            result!.Id.Should().Be(programExercise.Id);
+            result.Exercise.Should().NotBeNull();
+            result.Exercise.Name.Should().Be("Pull Ups");
+            result.Program.Should().NotBeNull();
+            result.Program.Name.Should().Be("Upper Body");
+        }
+
+        [Fact]
+        public async Task GetProgramExerciseByIdAsync_WithNonExistentId_ReturnsNull()
+        {
+            var result = await _repository.GetProgramExerciseByIdAsync(999);
+
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task ReorderExercisesAsync_WithValidExerciseIds_UpdatesOrderCorrectly()
+        {
+            var program = await Builder.Program("Reorder Test").SaveAsync();
+            var exercise1 = await Builder.Exercise("Exercise 1", "Chest").SaveAsync();
+            var exercise2 = await Builder.Exercise("Exercise 2", "Back").SaveAsync();
+            var exercise3 = await Builder.Exercise("Exercise 3", "Legs").SaveAsync();
+
+            var pe1 = new ProgramExercise { ProgramId = program.Id, ExerciseId = exercise1.Id, Order = 1, PlannedSets = 3, PlannedReps = 10, PlannedWeight = 100, PlannedRestTimeSeconds = 120 };
+            var pe2 = new ProgramExercise { ProgramId = program.Id, ExerciseId = exercise2.Id, Order = 2, PlannedSets = 3, PlannedReps = 10, PlannedWeight = 100, PlannedRestTimeSeconds = 120 };
+            var pe3 = new ProgramExercise { ProgramId = program.Id, ExerciseId = exercise3.Id, Order = 3, PlannedSets = 3, PlannedReps = 10, PlannedWeight = 100, PlannedRestTimeSeconds = 120 };
+            
+            Context.ProgramExercises.AddRange(pe1, pe2, pe3);
+            await Context.SaveChangesAsync();
+
+            // Reorder: pe3, pe1, pe2
+            var newOrder = new List<int> { pe3.Id, pe1.Id, pe2.Id };
+
+            await _repository.ReorderExercisesAsync(program.Id, newOrder);
+
+            Context.ChangeTracker.Clear();
+            
+            var reorderedExercises = await Context.ProgramExercises
+                .Where(pe => pe.ProgramId == program.Id)
+                .OrderBy(pe => pe.Order)
+                .ToListAsync();
+
+            reorderedExercises.Should().HaveCount(3);
+            reorderedExercises[0].Id.Should().Be(pe3.Id);
+            reorderedExercises[0].Order.Should().Be(1);
+            reorderedExercises[1].Id.Should().Be(pe1.Id);
+            reorderedExercises[1].Order.Should().Be(2);
+            reorderedExercises[2].Id.Should().Be(pe2.Id);
+            reorderedExercises[2].Order.Should().Be(3);
+        }
+
+        [Fact]
+        public async Task ReorderExercisesAsync_WithPartialExerciseIds_UpdatesOnlyProvidedExercises()
+        {
+            var program = await Builder.Program("Partial Reorder Test").SaveAsync();
+            var exercise1 = await Builder.Exercise("Exercise A", "Chest").SaveAsync();
+            var exercise2 = await Builder.Exercise("Exercise B", "Back").SaveAsync();
+
+            var pe1 = new ProgramExercise { ProgramId = program.Id, ExerciseId = exercise1.Id, Order = 1, PlannedSets = 3, PlannedReps = 10, PlannedWeight = 100, PlannedRestTimeSeconds = 120 };
+            var pe2 = new ProgramExercise { ProgramId = program.Id, ExerciseId = exercise2.Id, Order = 2, PlannedSets = 3, PlannedReps = 10, PlannedWeight = 100, PlannedRestTimeSeconds = 120 };
+            
+            Context.ProgramExercises.AddRange(pe1, pe2);
+            await Context.SaveChangesAsync();
+
+            // Only reorder pe2 to position 1 (pe1 should remain at order 1)
+            var newOrder = new List<int> { pe2.Id };
+
+            await _repository.ReorderExercisesAsync(program.Id, newOrder);
+
+            Context.ChangeTracker.Clear();
+            
+            var updatedPe1 = await Context.ProgramExercises.FindAsync(pe1.Id);
+            var updatedPe2 = await Context.ProgramExercises.FindAsync(pe2.Id);
+
+            updatedPe1!.Order.Should().Be(1); // Unchanged
+            updatedPe2!.Order.Should().Be(1); // Updated
+        }
     }
 }

@@ -1,0 +1,89 @@
+@page
+@model WorkoutTracker.Web.Pages.Exercises.CreateModel
+@{
+    ViewData["Title"] = "Add New Exercise";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+            <a asp-page="Index" class="btn btn-outline-secondary me-3">
+                <i class="bi bi-arrow-left"></i> Back to Exercises
+            </a>
+            <h1 class="display-6 mb-0">Add New Exercise</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Exercise.Name" class="form-label">Exercise Name *</label>
+                        <input asp-for="Exercise.Name" class="form-control" placeholder="e.g., Barbell Back Squat">
+                        <span asp-validation-for="Exercise.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Exercise.PrimaryMuscle" class="form-label">Primary Muscle Group *</label>
+                        <input asp-for="Exercise.PrimaryMuscle" class="form-control" list="muscleGroups" 
+                               placeholder="e.g., Quadriceps">
+                        <datalist id="muscleGroups">
+                            <option value="Chest"></option>
+                            <option value="Back"></option>
+                            <option value="Shoulders"></option>
+                            <option value="Biceps"></option>
+                            <option value="Triceps"></option>
+                            <option value="Quadriceps"></option>
+                            <option value="Hamstrings"></option>
+                            <option value="Glutes"></option>
+                            <option value="Calves"></option>
+                            <option value="Core"></option>
+                            <option value="Forearms"></option>
+                        </datalist>
+                        <span asp-validation-for="Exercise.PrimaryMuscle" class="text-danger"></span>
+                        <div class="form-text">
+                            Start typing to see common muscle groups, or enter your own.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Exercise.Description" class="form-label">Description (Optional)</label>
+                        <textarea asp-for="Exercise.Description" class="form-control" rows="4" 
+                                  placeholder="Describe the exercise, proper form, or any notes..."></textarea>
+                        <span asp-validation-for="Exercise.Description" class="text-danger"></span>
+                        <div class="form-text">
+                            Add details about proper form, equipment needed, or variations.
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Create Exercise
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Tips for Adding Exercises</h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li><strong>Be specific:</strong> "Barbell Back Squat" is better than just "Squat"</li>
+                    <li><strong>Include equipment:</strong> This helps distinguish between variations</li>
+                    <li><strong>Use consistent naming:</strong> This makes searching easier later</li>
+                    <li><strong>Add good descriptions:</strong> Include form cues or setup instructions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

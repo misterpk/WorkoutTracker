@@ -1,10 +1,127 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mb-5">
+    <h1 class="display-4">💪 Workout Tracker</h1>
+    <p class="lead">Track your resistance training progress and build stronger habits</p>
+</div>
+
+<div class="row g-4">
+    <!-- Quick Actions -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Quick Actions</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <a asp-page="/Workouts/Create" class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-play-circle"></i>
+                            <div>Start Workout</div>
+                            <small class="d-block">Begin a new training session</small>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-page="/Exercises/Create" class="btn btn-outline-primary btn-lg w-100">
+                            <i class="bi bi-plus-circle"></i>
+                            <div>Add Exercise</div>
+                            <small class="d-block">Add to your exercise library</small>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-page="/Programs/Create" class="btn btn-outline-secondary btn-lg w-100">
+                            <i class="bi bi-collection"></i>
+                            <div>Create Program</div>
+                            <small class="d-block">Build a workout template</small>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-page="/Workouts/Index" class="btn btn-outline-secondary btn-lg w-100">
+                            <i class="bi bi-graph-up"></i>
+                            <div>View Progress</div>
+                            <small class="d-block">Check your workout history</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Your Stats</h5>
+                <div class="row text-center">
+                    <div class="col-12 mb-3">
+                        <div class="h3 text-primary mb-0">0</div>
+                        <small class="text-muted">Total Workouts</small>
+                    </div>
+                    <div class="col-6">
+                        <div class="h4 mb-0">0</div>
+                        <small class="text-muted">Exercises</small>
+                    </div>
+                    <div class="col-6">
+                        <div class="h4 mb-0">0</div>
+                        <small class="text-muted">Programs</small>
+                    </div>
+                </div>
+                <hr>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> 
+                    Stats will update as you use the app
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Getting Started Guide -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-lightbulb"></i> Getting Started</h5>
+                <p class="mb-3">New to the app? Here's how to get the most out of your workout tracking:</p>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <div class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">1</div>
+                            <div>
+                                <h6>Build Your Exercise Library</h6>
+                                <p class="small text-muted mb-0">Add the exercises you do regularly. Be specific with names and include good descriptions.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <div class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">2</div>
+                            <div>
+                                <h6>Create Workout Programs</h6>
+                                <p class="small text-muted mb-0">Build reusable workout templates with your favorite exercises and planned sets/reps.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <div class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">3</div>
+                            <div>
+                                <h6>Track Your Workouts</h6>
+                                <p class="small text-muted mb-0">Start workouts from your programs or freestyle, then log your actual performance.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <a asp-page="/Exercises/Index" class="btn btn-sm btn-outline-primary me-2">View Exercises</a>
+                    <a asp-page="/Programs/Index" class="btn btn-sm btn-outline-primary me-2">View Programs</a>
+                    <a asp-page="/Workouts/Index" class="btn btn-sm btn-outline-primary">View Workouts</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

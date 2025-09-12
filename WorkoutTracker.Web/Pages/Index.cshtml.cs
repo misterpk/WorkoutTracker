@@ -1,19 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WorkoutTracker.Web.Pages;
-
-public class IndexModel : PageModel
+namespace WorkoutTracker.Web.Pages
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    public class IndexModel : PageModel
     {
-        _logger = logger;
-    }
-
-    public void OnGet()
-    {
-
+        public void OnGet()
+        {
+            // For now, just a simple home page
+            // Later we can add dashboard stats here
+        }
     }
 }

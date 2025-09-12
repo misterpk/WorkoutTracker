@@ -1,0 +1,111 @@
+@page "{id:int}"
+@model WorkoutTracker.Web.Pages.Exercises.EditModel
+@{
+    ViewData["Title"] = $"Edit {Model.Exercise.Name}";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+            <a asp-page="Details" asp-route-id="@Model.Exercise.Id" class="btn btn-outline-secondary me-3">
+                <i class="bi bi-arrow-left"></i> Back to Details
+            </a>
+            <h1 class="display-6 mb-0">Edit Exercise</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-pencil"></i> Editing: @Model.Exercise.Name
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" asp-for="Exercise.Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Exercise.Name" class="form-label">Exercise Name *</label>
+                        <input asp-for="Exercise.Name" class="form-control" placeholder="e.g., Barbell Back Squat">
+                        <span asp-validation-for="Exercise.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Exercise.PrimaryMuscle" class="form-label">Primary Muscle Group *</label>
+                        <input asp-for="Exercise.PrimaryMuscle" class="form-control" list="muscleGroups" 
+                               placeholder="e.g., Quadriceps">
+                        <datalist id="muscleGroups">
+                            <option value="Chest" />
+                            <option value="Back" />
+                            <option value="Shoulders" />
+                            <option value="Biceps" />
+                            <option value="Triceps" />
+                            <option value="Quadriceps" />
+                            <option value="Hamstrings" />
+                            <option value="Glutes" />
+                            <option value="Calves" />
+                            <option value="Core" />
+                            <option value="Forearms" />
+                        </datalist>
+                        <span asp-validation-for="Exercise.PrimaryMuscle" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Exercise.Description" class="form-label">Description (Optional)</label>
+                        <textarea asp-for="Exercise.Description" class="form-control" rows="4" 
+                                  placeholder="Describe the exercise, proper form, or any notes..."></textarea>
+                        <span asp-validation-for="Exercise.Description" class="text-danger"></span>
+                        <div class="form-text">
+                            Add details about proper form, equipment needed, or variations.
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a asp-page="Details" asp-route-id="@Model.Exercise.Id" class="btn btn-secondary">Cancel</a>
+                            <a asp-page="Index" class="btn btn-outline-secondary">Back to List</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Change History (Placeholder for future) -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-clock-history"></i> Change History</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <div>
+                        <div>Last updated: @DateTime.Now.ToString("MMMM dd, yyyy 'at' h:mm tt")</div>
+                        <small>Change tracking will be added in future versions.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-lightbulb"></i> Editing Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li><strong>Be specific:</strong> Include equipment type in the name (e.g., "Dumbbell" vs "Barbell")</li>
+                    <li><strong>Update carefully:</strong> Changes will affect all programs and workouts using this exercise</li>
+                    <li><strong>Good descriptions:</strong> Include form cues, setup instructions, or common mistakes to avoid</li>
+                    <li><strong>Consistent naming:</strong> Follow your existing naming conventions for easier searching</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

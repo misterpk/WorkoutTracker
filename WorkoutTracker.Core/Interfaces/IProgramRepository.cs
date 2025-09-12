@@ -11,6 +11,13 @@ namespace WorkoutTracker.Core.Interfaces
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<Program?> GetByNameAsync(string name);
+        Task<bool> HasWorkoutsAsync(int programId);
+        Task<Program> CopyAsync(int sourceProgramId, string newName);
+        Task<ProgramExercise> AddExerciseAsync(ProgramExercise programExercise);
+        Task UpdateProgramExerciseAsync(ProgramExercise programExercise);
+        Task DeleteProgramExerciseAsync(int programExerciseId);
+        Task<ProgramExercise?> GetProgramExerciseByIdAsync(int programExerciseId);
+        Task ReorderExercisesAsync(int programId, List<int> exerciseIds);
     }
 }
 

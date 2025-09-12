@@ -310,7 +310,7 @@ namespace WorkoutTracker.Infrastructure.Migrations
             modelBuilder.Entity("WorkoutTracker.Core.Models.WorkoutExercise", b =>
                 {
                     b.HasOne("WorkoutTracker.Core.Models.Exercise", "Exercise")
-                        .WithMany()
+                        .WithMany("WorkoutExercises")
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -329,6 +329,8 @@ namespace WorkoutTracker.Infrastructure.Migrations
             modelBuilder.Entity("WorkoutTracker.Core.Models.Exercise", b =>
                 {
                     b.Navigation("ProgramExercises");
+
+                    b.Navigation("WorkoutExercises");
                 });
 
             modelBuilder.Entity("WorkoutTracker.Core.Models.Program", b =>

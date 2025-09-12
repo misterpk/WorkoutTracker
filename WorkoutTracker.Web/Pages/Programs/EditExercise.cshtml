@@ -1,0 +1,140 @@
+@page "{id:int}"
+@model WorkoutTracker.Web.Pages.Programs.EditExerciseModel
+@{
+    ViewData["Title"] = "Edit Exercise";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+            <a asp-page="Details" asp-route-id="@Model.OriginalProgramExercise?.ProgramId" class="btn btn-outline-secondary me-3">
+                <i class="bi bi-arrow-left"></i> Back to Program
+            </a>
+            <h1 class="display-6 mb-0">Edit Exercise</h1>
+        </div>
+
+        @if (Model.OriginalProgramExercise != null)
+        {
+            <div class="alert alert-info">
+                <strong>Editing:</strong> @Model.OriginalProgramExercise.Exercise.Name 
+                <span class="ms-2 text-muted">(@Model.OriginalProgramExercise.Exercise.PrimaryMuscle)</span>
+                <br>
+                <strong>In program:</strong> @Model.OriginalProgramExercise.Program.Name
+            </div>
+        }
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" asp-for="ProgramExercise.Id" />
+                    <input type="hidden" asp-for="ProgramExercise.ProgramId" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.Order" class="form-label">Order *</label>
+                            <input asp-for="ProgramExercise.Order" class="form-control" type="number" min="1" max="100">
+                            <span asp-validation-for="ProgramExercise.Order" class="text-danger"></span>
+                            <div class="form-text">
+                                Exercise order in the program.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Empty column for spacing -->
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedSets" class="form-label">Planned Sets *</label>
+                            <input asp-for="ProgramExercise.PlannedSets" class="form-control" type="number" min="1" max="20">
+                            <span asp-validation-for="ProgramExercise.PlannedSets" class="text-danger"></span>
+                            <div class="form-text">
+                                Number of sets to perform.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedReps" class="form-label">Planned Reps *</label>
+                            <input asp-for="ProgramExercise.PlannedReps" class="form-control" type="number" min="1" max="100">
+                            <span asp-validation-for="ProgramExercise.PlannedReps" class="text-danger"></span>
+                            <div class="form-text">
+                                Number of reps per set.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedWeight" class="form-label">Planned Weight (lbs)</label>
+                            <input asp-for="ProgramExercise.PlannedWeight" class="form-control" type="number" min="0" max="1000" step="0.25">
+                            <span asp-validation-for="ProgramExercise.PlannedWeight" class="text-danger"></span>
+                            <div class="form-text">
+                                Target weight (leave 0 for bodyweight exercises).
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProgramExercise.PlannedRestTimeSeconds" class="form-label">Rest Time (seconds)</label>
+                            <select asp-for="ProgramExercise.PlannedRestTimeSeconds" class="form-select">
+                                <option value="30">30 seconds</option>
+                                <option value="45">45 seconds</option>
+                                <option value="60">1 minute</option>
+                                <option value="90">90 seconds</option>
+                                <option value="120">2 minutes</option>
+                                <option value="180">3 minutes</option>
+                                <option value="240">4 minutes</option>
+                                <option value="300">5 minutes</option>
+                            </select>
+                            <span asp-validation-for="ProgramExercise.PlannedRestTimeSeconds" class="text-danger"></span>
+                            <div class="form-text">
+                                Rest time between sets.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-page="Details" asp-route-id="@Model.OriginalProgramExercise?.ProgramId" class="btn btn-secondary">Cancel</a>
+                        <div>
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-check-circle"></i> Update Exercise
+                            </button>
+                            <button type="submit" asp-page-handler="Delete" asp-route-id="@Model.ProgramExercise.Id" 
+                                    class="btn btn-outline-danger"
+                                    onclick="return confirm('Are you sure you want to remove this exercise from the program?')">
+                                <i class="bi bi-trash"></i> Remove from Program
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Exercise Info -->
+        @if (Model.OriginalProgramExercise != null)
+        {
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-info-circle"></i> Exercise Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Exercise:</strong> @Model.OriginalProgramExercise.Exercise.Name<br>
+                            <strong>Primary Muscle:</strong> @Model.OriginalProgramExercise.Exercise.PrimaryMuscle
+                        </div>
+                        <div class="col-md-6">
+                            @if (!string.IsNullOrEmpty(Model.OriginalProgramExercise.Exercise.Description))
+                            {
+                                <strong>Description:</strong><br>
+                                <span class="text-muted">@Model.OriginalProgramExercise.Exercise.Description</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
